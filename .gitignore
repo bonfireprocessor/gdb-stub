@@ -16,3 +16,4 @@
 *.geany
 *.vhd.old
 /gdb-stub
+/.gdbinit
