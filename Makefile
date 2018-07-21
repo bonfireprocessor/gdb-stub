@@ -72,6 +72,6 @@ clean:
 
 
 gdbtest.elf : riscv-gdb-stub.o gdb_interface.o gdb_traps.o console.o debug_test.o
-	$(TARGET_LD)  -o $@ $(TARGET_LDFLAGS_SYSCALL)  riscv-gdb-stub.o gdb_interface.o gdb_traps.o console.o debug_test.o -lm
+	$(TARGET_LD) -o $@ $(TARGET_LDFLAGS_SYSCALL)  riscv-gdb-stub.o gdb_interface.o gdb_traps.o console.o debug_test.o -lg -lm -lgloss
 
 
