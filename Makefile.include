@@ -1,0 +1,1 @@
+OBJECTS +=  riscv-gdb-stub.o gdb_interface.o

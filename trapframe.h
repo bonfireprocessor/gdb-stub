@@ -21,6 +21,6 @@ typedef struct
 
 
 
-typedef  trapframe_t* (*t_ptrapfuntion)(trapframe_t*);
+
 
 #endif

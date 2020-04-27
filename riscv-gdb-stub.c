@@ -145,7 +145,7 @@ uint32_t flush_cache()
 {
     //PRINTK("Flushing DCACHE...");
 #if defined(DCACHE_SIZE) && defined(BONFIRE)
-//#pragma message "implementing DCache Flush"
+#pragma message "implementing DCache Flush"
 uint32_t *pmem = (void*)(DRAM_TOP-DCACHE_SIZE+1);
 
 static volatile uint32_t sum=0; // To avoid optimizing away code below
@@ -633,28 +633,6 @@ trapframe_t* handle_exception (trapframe_t *ptf)
     return prepare_return(ptf,0);
 }
 
-
-trapframe_t* trap_handler(trapframe_t *ptf)
-{
-
-    if (ptf->cause & 0x80000000) {
-      // place interrupt handler here...
-      return ptf;
-    }  else {
-       return handle_exception(ptf);
-    }
-}
-
-
-extern void __trap();
-
-t_ptrapfuntion gdb_initDebugger(int set_mtvec)
-{
-  if (set_mtvec) {
-    write_csr(mtvec,__trap);
-  }
-  return handle_exception;
-}
 
 
 
