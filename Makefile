@@ -35,8 +35,8 @@ TARGET_CFLAGS +=  -march=$(ARCH) -mabi=$(ABI) -Wall -Og -g  -fomit-frame-pointer
 TARGET_LDFLAGS_SYSCALL += -march=$(ARCH) -mabi=$(ABI)   \
 	 -Wl,--gc-sections  -Wl,-T$(LINKDEF_DRAM)
 
-
-
+OBJECTS =  gdb_traps.o console.o debug_test.o trap.o 
+include Makefile.include 
 
 all:  gdbtest.bin
 
@@ -71,7 +71,7 @@ clean:
 
 
 
-gdbtest.elf : riscv-gdb-stub.o gdb_interface.o gdb_traps.o console.o debug_test.o
-	$(TARGET_LD) -o $@ $(TARGET_LDFLAGS_SYSCALL)  riscv-gdb-stub.o gdb_interface.o gdb_traps.o console.o debug_test.o -lg -lm -lgloss
+gdbtest.elf : $(OBJECTS)
+	$(TARGET_LD) -o $@ $(TARGET_LDFLAGS_SYSCALL) $(OBJECTS) -lg -lm -lgloss
 
 

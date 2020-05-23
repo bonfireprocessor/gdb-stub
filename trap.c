@@ -1,6 +1,7 @@
 
 #include "trapframe.h"
 #include "riscv-gdb-stub.h"
+#include "encoding.h"
 
 
 

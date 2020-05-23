@@ -3,12 +3,15 @@
 
 #include "riscv-gdb-stub.h"
 
+
+#define BAUDRATE 500000
+
 void do_increment(volatile int *px)
 {
   (*px)++;
 }
 
-#define BAUDRATE 115200
+
 
 #define SIZE 10
 
@@ -46,7 +49,6 @@ int i;
   insertLastAt(3);
   printk("\n");
   for(i=0;i<SIZE;i++) printk("%4llu ",test[i]);
-  gdb_breakpoint();
 }
 
 
@@ -57,13 +59,14 @@ volatile int i=0;
   printk("Run with baudrate %d\n",BAUDRATE);
   gdb_setup_interface(BAUDRATE);
   gdb_initDebugger(1);
-
+  gdb_breakpoint();
 
   arrayTest();
+  gdb_breakpoint();
 
-  while(1) {
+  // while(1) {
 
-    do_increment(&i);
-    if ((i % 10000)==0 ) printk("*");
-  }
+  //   do_increment(&i);
+  //   if ((i % 10000)==0 ) printk("*");
+  // }
 }
