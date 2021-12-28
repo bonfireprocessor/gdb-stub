@@ -143,18 +143,19 @@ enum {
 
 uint32_t flush_cache()
 {
-    //PRINTK("Flushing DCACHE...");
+
 #if defined(DCACHE_SIZE) && defined(BONFIRE)
 #pragma message "implementing DCache Flush"
 uint32_t *pmem = (void*)(DRAM_TOP-DCACHE_SIZE+1);
 
 static volatile uint32_t sum=0; // To avoid optimizing away code below
 
+PRINTK("Flushing DCACHE (buffer at %08lx)...",pmem);
   while ((uint32_t)pmem < DRAM_TOP) {
     sum+= *pmem++;
   }
 #endif
-  //PRINTK("OK\n");
+PRINTK("Flush OK\n");
 
   return 0;
 }
@@ -320,20 +321,27 @@ static  char *hex2mem ( char *buf,  char *mem, int count, int may_fault)
 {
   int i;
   unsigned char ch;
+  void *t_mem = mem; 
 
   set_mem_fault_trap(may_fault);
+  #ifdef DEBUG
+  hex_dump(t_mem,count/4+1);
+  #endif
 
   for (i=0; i<count; i++)
     {
       ch = hex(*buf++) << 4;
       ch |= hex(*buf++);
       *mem++ = ch;
+      //PRINTK("%x->%x ",(uint32_t)*(mem-1),mem-1);
       if (mem_err)
-    return 0;
+          return 0;
     }
 
   set_mem_fault_trap(0);
-
+  #ifdef DEBUG
+  hex_dump(t_mem,count/4+1);
+  #endif
   return mem;
 }
 
@@ -412,12 +420,17 @@ static volatile int semaphore =0;
 static trapframe_t*  prepare_return(trapframe_t *ptf,int flagSingleStep)
 {
   flush_cache();
+  PRINTK("before fence.i\n");
   asm("fence.i"); // Flush also instruction cache
+  PRINTK("after fence.i\n");
   // In case of a hard coded ebreak jump over it
-  if ( *((uint32_t*)ptf->epc)==0x00100073)  ptf->epc+=4;
+  if ( *((uint32_t*)ptf->epc)==0x00100073) {
+     ptf->epc+=4;
+     PRINTK("hard coded break detected\n");
+  }  
   semaphore=0;
   catch_mem_err=0;
-  PRINTK("prepare_return\n");
+  PRINTK("prepare_return to: %08lx\n",ptf->epc);
 
   if (flagSingleStep)  set_csr(0x7c0,MBONFIRE_SSTEP); // Set Single Step Mode
   return ptf;
@@ -449,6 +462,9 @@ trapframe_t* handle_exception (trapframe_t *ptf)
 
   //dump_tf(ptf);
   PRINTK("Trap %lx\n",ptf->cause);
+  #ifdef DEBUG
+  dump_tf(ptf);
+  #endif
 
   ptf->gpr[0]=0;
 

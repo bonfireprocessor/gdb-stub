@@ -114,11 +114,12 @@ int i;
 
     for(i=0;i<numWords;i++) {
       if ((i % 4)==0) { // Write Memory address for every four words
-        printk("\n%lx    ",(uint32_t)&pmem[i]);
+        printk("\n%08lx    ",(uint32_t)&pmem[i]);
       }
-      printk("%lx ",pmem[i]);
+      printk("%08lx ",pmem[i]);
       //writeHex(pmem[i]);
     }
+    write_console("\n");
 }
 
 
