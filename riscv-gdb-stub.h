@@ -1,6 +1,8 @@
 #ifndef __RISCV_GDB_STUB_H__
 #define __RISCV_GDB_STUB_H__
 
+#include "trapframe.h"
+
 typedef  trapframe_t* (*t_ptrapfuntion)(trapframe_t*);
 
 t_ptrapfuntion gdb_initDebugger(int set_mtvec);
