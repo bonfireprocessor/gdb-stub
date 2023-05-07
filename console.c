@@ -90,7 +90,7 @@ void dump_tf(trapframe_t* tf)
          (uint32_t)tf->insn, tf->status);
 }
 
-void do_panic(const char* s, ...)
+void __attribute__((noreturn)) do_panic(const char* s, ...)
 {
   va_list vl;
   va_start(vl, s);
@@ -100,7 +100,7 @@ void do_panic(const char* s, ...)
 
 }
 
-void kassert_fail(const char* s)
+void __attribute__((noreturn)) kassert_fail(const char* s)
 {
   register uintptr_t ra asm ("ra");
   do_panic("assertion failed @ %p: %s\n", ra, s);
