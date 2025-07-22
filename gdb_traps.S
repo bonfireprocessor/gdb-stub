@@ -70,6 +70,9 @@ jal trap_handler
 LOAD  t1,33*REGBYTES(a0) // set epc
 csrw mepc,t1
 
+LOAD  t1,32*REGBYTES(a0)  // mstatus
+csrw mstatus,t1
+
 // The SP of the trapped context will be restored below
 
 # restore x registers

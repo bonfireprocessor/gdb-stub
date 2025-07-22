@@ -321,8 +321,7 @@ static  char *hex2mem ( char *buf,  char *mem, int count, int may_fault)
 {
   int i;
   unsigned char ch;
- 
-
+  
   set_mem_fault_trap(may_fault);
   #ifdef DEBUG
   hex_dump(t_mem,count/4+1);
