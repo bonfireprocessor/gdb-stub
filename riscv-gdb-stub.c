@@ -321,8 +321,7 @@ static  char *hex2mem ( char *buf,  char *mem, int count, int may_fault)
 {
   int i;
   unsigned char ch;
-  //void *t_mem = mem; 
-
+  
   set_mem_fault_trap(may_fault);
   #ifdef DEBUG
   hex_dump(t_mem,count/4+1);
@@ -622,9 +621,8 @@ trapframe_t* handle_exception (trapframe_t *ptf)
     case 'k' :
 #ifdef BONFIRE
       ptf->epc=SRAM_BASE;
-      semaphore=0;
-      set_csr(mie,0); // disable all interrutps
-      ptf->status = 0; // reset MIE and MPIE
+      ptf->status=0;
+      semaphore=0;      
       return ptf;
 #else
      break;
